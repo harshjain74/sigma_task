@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:sigma_task/prov.dart';
 
 import 'card.dart';
 
@@ -21,11 +23,11 @@ class _HomePageState extends State<HomePage> {
     futurecard = apiget();
   }
 
-  savedataonsf(String data) async {
+  /* savedataonsf(String data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setString('carddata', data);
-  }
+  }*/
 
   TextEditingController textcontroller = TextEditingController();
 
@@ -143,8 +145,10 @@ class _HomePageState extends State<HomePage> {
       _baseUrl,
     );
     if (response.statusCode == 200) {
-      savedataonsf(response.body);
+      // savedataonsf(response.body);
       var snapshot = jsonDecode(response.body);
+
+      Provider.of<ProvData>(context, listen: false).savedata(response.body);
 
       return snapshot;
     } else {
